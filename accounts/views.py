@@ -120,3 +120,16 @@ def home(request):
 
 def AboutUs(request):
     return render(request,'accounts/about.html')  
+
+def Contact(request):
+    return render(request,'accounts/contact.html')  
+
+
+def Service(request):
+    return render(request,'accounts/services.html') 
+
+
+def Terms(request):
+    return render(request,'accounts/Terms.html')
+
+

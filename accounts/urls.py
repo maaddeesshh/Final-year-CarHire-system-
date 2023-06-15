@@ -13,7 +13,10 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('register/', views.registerPage, name='register'),
     path('',views.home,name='home'),
-    path('about/',views.AboutUs,name="AboutUs"),
+    path('about/',views.AboutUs,name="AboutUs"), 
+    path('contact/',views.Contact,name="contact"),
+    path('services/',views.Service,name="Services"), 
+    # path('Terms_Of_Use/',views.Terms,name="Terms"),
     path('owner/',views.ownerPage,name="owner_dashboard"),
     path('owner_update/', views.OwnerUpdateProfile, name='owner-update-profile'),
     path('owner_delete/', views.OwnerdeleteAccount, name='owner-delete-profile'),
@@ -25,5 +28,6 @@ urlpatterns = [
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_sent.html"),name="password_reset_done"),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password_reset_form.html"),name="password_reset_confirm"),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_done.html"),name="password_reset_complete"),
+    path('Terms_Of_Use/',views.Terms,name="Terms"),
    
 ]
