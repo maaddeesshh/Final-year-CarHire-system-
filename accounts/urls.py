@@ -15,13 +15,13 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('about/',views.AboutUs,name="AboutUs"),
     path('owner/',views.ownerPage,name="owner_dashboard"),
+    path('owner_update/', views.OwnerUpdateProfile, name='owner-update-profile'),
     path('customer/',views.customerPage,name="customer_dashboard"),
+    path('customer_update/', views.UpdateProfile, name='update-profile'),
     # path('admin/',views.admin_dashboard,name="admin_dashboard"),
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"),name="reset_password"),
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_sent.html"),name="password_reset_done"),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password_reset_form.html"),name="password_reset_confirm"),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_done.html"),name="password_reset_complete"),
-
-
    
 ]

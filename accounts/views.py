@@ -3,6 +3,7 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
@@ -56,9 +57,43 @@ def registerPage(request):
           else:
                msg= 'An error occurred during registration' 
      return render(request, 'accounts/login_register.html', {'form':form, 'msg':msg})
+@login_required
+def OwnerUpdateProfile(request):
+    msg = None
+    user = request.user
+    form = MyUserCreationForm(instance=user)
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            msg = 'Your account has been updated successfully.'
+            return redirect('home')
+        else:
+            msg = 'An error occurred during account update.'
+
+    return render(request, 'accounts/Owner_Update.html', {'form': form, 'msg': msg})
+
+@login_required
+def UpdateProfile(request):
+    msg = None
+    user = request.user
+    form = MyUserCreationForm(instance=user)
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            msg = 'Your account has been updated successfully.'
+            return redirect('home')
+        else:
+            msg = 'An error occurred during account update.'
+
+    return render(request, 'accounts/Customer_Update.html', {'form': form, 'msg': msg})
+
+
 
 def customerPage(request):
       return render(request, 'accounts/customer_dashboard.html')
+
 def ownerPage(request):
      return render(request, 'accounts/owner_dashboard.html')
 def home(request):
