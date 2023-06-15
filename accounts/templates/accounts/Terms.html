@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <title>Terms of Use - Tenant Car Rental</title>
 
 </head>
-<body>
+<body class="bg-secondary-subtle">
   <header>
     <h1>Terms of Use</h1>
   </header>
   
-  <div>
+  <div class="card">
+    <div class="card-body"> 
     <h2>1. Service Overview</h2>
     <p>a. Tenant Car Rental provides a platform for tenants relocating to rent vehicles for their transportation needs during the relocation process.</p>
     <p>b. Our services include vehicle selection, rental duration options, online booking, and additional services related to car rentals.</p>
@@ -71,14 +73,16 @@
     <p>If you have any questions or concerns about these Terms, please contact us at:</p>
     <p>Email: info@tenantcarrental.com</p>
     <p>Phone: +25417548446</p>    
+    </div>
+    <div>
+      <a href="{{request.META.HTTP_REFERER}}"> Go back</a>
   </div>
 
-  <div>
-    <a href="{{request.META.HTTP_REFERER}}"> Go back</a>
-</div>
+  </div>
   
-  <footer>
+  <footer class="mx-5">
     <p>&copy; 2023 Tenant CarHire. All rights reserved.</p>
   </footer>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </html>
