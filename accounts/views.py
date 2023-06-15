@@ -74,6 +74,15 @@ def OwnerUpdateProfile(request):
     return render(request, 'accounts/Owner_Update.html', {'form': form, 'msg': msg})
 
 @login_required
+def OwnerdeleteAccount(request):
+    user = request.user
+    if request.method == 'POST':
+        user.delete()
+        return redirect('register')
+    
+    return render(request, 'accounts/Owner_delete_account.html')
+
+@login_required
 def UpdateProfile(request):
     msg = None
     user = request.user
@@ -88,6 +97,16 @@ def UpdateProfile(request):
             msg = 'An error occurred during account update.'
 
     return render(request, 'accounts/Customer_Update.html', {'form': form, 'msg': msg})
+
+
+@login_required
+def deleteAccount(request):
+    user = request.user
+    if request.method == 'POST':
+        user.delete()
+        return redirect('register')
+    
+    return render(request, 'accounts/Customer_delete_account.html')
 
 
 

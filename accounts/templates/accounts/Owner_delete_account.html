@@ -1,34 +1,26 @@
 <!DOCTYPE html>
-{% load static %}
+{%load static%}
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
     <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
-    <title>update-account</title>
-  </head>
+    <title>delete-profile!</title>
+</head>
 
-  <body>
+<body>
     <header class="header header--loggedIn">
-      <div class="container">
-        <a href="/" class="header__logo">
-          <img src="{% static 'images/logo.svg' %}" />
-          <h1>carHire</h1>
-        </a>
-          <!-- Not Logged In -->
-          <!-- <a href="/login.html">
-            <img src="./assets/avatar.svg" />
-            <p>Account</p>
-          </a> -->
+        <div class="container">
+            <a href="/" class="header__logo">
+                <img src="{% static 'images/logo.svg' %}" />
+                <h1>carHire</h1>
+            </a>
 
-          <!-- Logged In -->
-          
     </header>
-
-    <main class="update-account layout">
+    <main class="delete-item layout">
         <div class="container">
             <div class="layout__box">
                 <div class="layout__boxHeader">
@@ -42,33 +34,30 @@
                                 </path>
                             </svg>
                         </a>
-                        <h3>Edit your profile</h3>
+                        <h3>Back</h3>
                     </div>
                 </div>
                 <div class="layout__body">
-                  
                     <form method="post" class="form" action="#">
-                      {%csrf_token%}
-                      <span>
-                        {% if msg %}
-                            {{msg}}
-                        {% endif %}
-                      </span>
-                      {% for field in form %}
-              <div class="form__group">
-                <label for="room_name">{{field.label}}</label>
-                {{field}}
-              </div>
-              {% endfor %}
-                          <a href="{{request.META.HTTP_REFERER}}" my-5> Go back</a>
-                            
-                            <button class="btn btn--main" type="submit">Update</button>
+                        {%csrf_token%}
+                        <div class="form__group">
+                            <p>Are you sure you want to delete account?</p>
+                        </div>
+
+                        <div class="for__group">
+                            <input class="btn btn--main" type="submit" value="Confirm" />
+                        </div>
+                        <a href="{{request.META.HTTP_REFERER}}"> Go back</a>
+
                     </form>
                 </div>
             </div>
         </div>
-      </div>
     </main>
-  </body>
-  
+    <script src="{% static 'styles/script.js' %}"></script>
+</body>
+
 </html>
+
+
+
