@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static %}     <!--load all static folders and files -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,11 +13,11 @@
     <title>carHire</title>
 </head>
 <body>
-    {%include 'navbar.html'%}
+    {%include 'navbar.html'%}    <!--incoporate navbar.html features in this file -->
     
     {% block content %}
 
-
+ <!--where all the files that will extend this file will be -->
     {% endblock%}
 
     {%include 'footer.html'%}

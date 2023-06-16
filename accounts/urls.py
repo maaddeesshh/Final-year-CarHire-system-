@@ -1,9 +1,10 @@
 from django.urls import path
 from  django.contrib.auth import views as auth_views
-from. import views 
+from. import views #import  all views which is in our app
 
 
-
+#define a list of urls that will navigate user
+#add a name value to be dynamic
 urlpatterns = [
 
     # path('register_owner/', views.owner_signup, name='register_owner'),

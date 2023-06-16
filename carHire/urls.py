@@ -19,10 +19,10 @@ from django.urls import path,include
 # from django.conf import settings
 # from django.conf.urls.static import static
 
-
+#register our apps urls here
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('accounts.urls')),
+    path('', include('accounts.urls')),   #include accounts urls
 
     # path('Owner/', include('Owner.urls')),
     # path('Customer/', include('Customer.urls')),
