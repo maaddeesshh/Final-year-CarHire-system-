@@ -24,6 +24,8 @@ urlpatterns = [
     path('customer/',views.customerPage,name="customer_dashboard"),
     path('customer_update/', views.UpdateProfile, name='update-profile'),
     path('customer_delete/', views.deleteAccount, name='delete-profile'),
+    path ('edit/<str:pk>/',views.updateCar, name='update_car'),
+    path ('delete/<str:pk>/',views.deleteCar, name='delete_car'),
     # path('admin/',views.admin_dashboard,name="admin_dashboard"),
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"),name="reset_password"),
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_sent.html"),name="password_reset_done"),

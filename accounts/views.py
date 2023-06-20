@@ -11,6 +11,11 @@ from django.contrib import messages
 from .models import * #from models file import all models
 from django.contrib.auth.models import Group
 from .forms import * #from forms file import all forms
+from Owner.models import Car
+from django.http import HttpResponse, HttpResponseRedirect
+from Owner.forms import CarForm
+from django.urls import reverse
+from django.db.models import Q
 
 
 #authenticate, login user
@@ -61,7 +66,7 @@ def registerPage(request):
           else:
                msg= 'An error occurred during registration' 
      return render(request, 'accounts/login_register.html', {'form':form, 'msg':msg})
-@login_required #to ensure the request user is authenticated and is logged in
+@login_required(login_url='login')  #to ensure the request user is authenticated and is logged in
 #owner  update profile 
 def OwnerUpdateProfile(request):
     msg = None
@@ -78,7 +83,7 @@ def OwnerUpdateProfile(request):
 
     return render(request, 'accounts/Owner_Update.html', {'form': form, 'msg': msg})
 
-@login_required
+@login_required(login_url='login') 
 #owner  delete profile 
 def OwnerdeleteAccount(request):
     user = request.user
@@ -88,7 +93,7 @@ def OwnerdeleteAccount(request):
     
     return render(request, 'accounts/Owner_delete_account.html')
 
-@login_required
+@login_required(login_url='login') 
 #customer  update profile 
 def UpdateProfile(request):
     msg = None
@@ -106,7 +111,7 @@ def UpdateProfile(request):
     return render(request, 'accounts/Customer_Update.html', {'form': form, 'msg': msg})
 
 
-@login_required
+@login_required(login_url='login') 
 #customer  delete profile 
 def deleteAccount(request):
     user = request.user
@@ -122,7 +127,34 @@ def customerPage(request):
       return render(request, 'accounts/customer_dashboard.html')
 
 def ownerPage(request):
-     return render(request, 'accounts/owner_dashboard.html')
+     cars = Car.objects.all()
+     context = {'cars':cars}     
+
+     return render(request, 'accounts/owner_dashboard.html' , context)
+@login_required(login_url='login') 
+def updateCar(request, pk):
+     car = Car.objects.get(id=pk)
+     form = CarForm(instance=car)
+     if request.user != car.owner:
+          return HttpResponse('You are not allowed here!!')
+
+     if request.method == 'POST':
+          form = CarForm(request.POST, instance=car)
+          if form.is_valid:
+               form.save()
+               return redirect('owner_dashboard')
+     context={'form':form}
+     return render(request, 'Owner/createcar.html', context)
+
+@login_required(login_url='login') 
+def deleteCar(request, pk):
+     car = Car.objects.get(id=pk)
+     if request.user != car.owner:
+          return HttpResponse('You are not allowed here!!')
+     if request.method == 'POST':
+          car.delete()
+          return redirect('owner_dashboard')  
+     return render(request, 'accounts/delete.html', {'obj':car})
 def home(request):
     return render(request,'accounts/home.html')
 

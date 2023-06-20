@@ -18,12 +18,30 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  My Cars
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'CreateCar'%}">Add Car</a></li>
+                  <li><a class="dropdown-item" href="{% url 'viewCars' %}">view cars</a></li>
+                </ul>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hire Management
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="">Booking Calendar</a></li>
+                    <li><a class="dropdown-item" href="">Hire history</a></li>
+                  </ul>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Notifications
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="">Rental request</a></li>
+                      <li><a class="dropdown-item" href="">Bookings update</a></li>
+                    </ul>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Profile
@@ -33,19 +51,32 @@
                   <li><a class="dropdown-item" href="{% url 'owner-delete-profile' %}">Delete</a></li>
                 </ul>
                 <li class="nav-item">
+                  <a class="nav-link" href="{%url 'contact' %}"> Support</a>
+                </li> 
+                <li class="nav-item">
                     <a class="nav-link" href="{%url 'logout'%}"> Logout</a>
                   </li> 
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
           </div>
         </div>
       </nav>
 
     <p>Hello  {{user.username}}</p>
+    <div>
+      {% for car in cars %}
+      <ul>
+        <li>{{car.description}}</li>
+        <li>{{car.reg_no}}</li> 
+        <li>{{car.phone_no}}</li>
+      </ul>
+      <br>
+      <img src="{{car.image.url}}" alt="Car Image">
+      <a href="{%url 'update_car' car.id %}">Edit</a>
+      <a href="{%url 'delete_car' car.id %}">Delete</a>
+      {%endfor%}
+    </div>
+    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </html>

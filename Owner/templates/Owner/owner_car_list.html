@@ -1,0 +1,12 @@
+{% for car in cars %}
+    <div>
+        <img src="{{car.image.url}}" alt="">
+        <h3>{{ car.reg_no }}</h3>
+        <h3>{{car.phone_no}}</h3>
+        <p>{{ car.description }}</p>
+
+    
+    </div>
+{% empty %}
+    <p>No cars found.</p>
+{% endfor %}
