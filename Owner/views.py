@@ -24,7 +24,7 @@ def CreateCar(request):
 
 
 
-@login_required
+@login_required(login_url='login')
 def owner_car_list(request):
     user = request.user
     cars = Car.objects.filter(owner=user)
