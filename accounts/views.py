@@ -124,7 +124,9 @@ def deleteAccount(request):
 
 
 def customerPage(request):
-      return render(request, 'accounts/customer_dashboard.html')
+    cars = Car.objects.all()
+    context = {'cars':cars} 
+    return render(request, 'accounts/customer_dashboard.html',context)
 
 def ownerPage(request):
      cars = Car.objects.all()
