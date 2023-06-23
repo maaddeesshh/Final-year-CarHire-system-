@@ -27,9 +27,7 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Hire</a>
-                </li>
+              
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Notifications
@@ -78,7 +76,7 @@
                   <h5 class="card-title">{{car.reg_no}}</h5>
                   <h5 class="card-title">{{car.phone_no}}</h5>
                   <p class="card-text">{{car.description}}</p>
-                  <a href="" class="btn btn-primary mb-2">Hire</a>
+                  <a href="{%url 'hire' car.id %}" class="btn btn-primary mb-2">Hire</a>
                 </div>
             </div>
         </div>

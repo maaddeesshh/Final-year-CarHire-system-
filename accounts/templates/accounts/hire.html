@@ -1,0 +1,16 @@
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if book_error %}
+      <p class="error">{{ book_error }}</p>
+    {% endif %}
+    {% if booked_times %}
+      <h2>Booked Times:</h2>
+      <ul>
+        {% for booked_time in booked_times %}
+          <li>{{ booked_time.start_date }} - {{ booked_time.end_date }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <button type="submit">Hire Car</button>
+  </form>

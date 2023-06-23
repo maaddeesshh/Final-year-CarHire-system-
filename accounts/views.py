@@ -16,6 +16,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from Owner.forms import CarForm
 from django.urls import reverse
 from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from Hire.models import Hire
+from datetime import date
 
 
 #authenticate, login user
@@ -130,7 +133,10 @@ def customerPage(request):
 
 def ownerPage(request):
      cars = Car.objects.all()
-     context = {'cars':cars}     
+     notification_count = Hire.objects.filter(car__in=cars, is_approved=False, is_rejected=False).count()
+    
+     context = {'cars':cars,'notification_count': notification_count} 
+
 
      return render(request, 'accounts/owner_dashboard.html' , context)
 @login_required(login_url='login') 
@@ -157,6 +163,42 @@ def deleteCar(request, pk):
           car.delete()
           return redirect('owner_dashboard')  
      return render(request, 'accounts/delete.html', {'obj':car})
+
+@login_required(login_url='login')
+def hire_car(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    user = user=request.user
+    form = HireForm()
+
+    if request.method == 'POST':
+        form = HireForm(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+
+            if end_date < start_date:
+                return render(request, 'accounts/hire.html', {'form': form, 'book_error': 'End date cannot be earlier than the start date'})
+
+            # Get all future hires
+            booked_times = Hire.objects.filter(car=car, end_date__gte=date.today(), is_approved=True)
+            
+            if booked_times.exists():
+                return render(request, 'accounts/hire.html', {'form': form, 'booked_times': booked_times})
+
+            hire = form.save(commit=False)
+            hire.car = car
+            hire.customer = user
+            hire.save()
+            return redirect('customer_dashboard')
+
+
+    context = {
+        'form': form,
+        'car': car
+    }
+
+    return render(request, 'accounts/hire.html' ,context)
+
 def home(request):
     return render(request,'accounts/home.html')
 

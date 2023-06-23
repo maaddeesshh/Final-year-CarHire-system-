@@ -43,9 +43,14 @@
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Notifications
+                    
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="">Rental request</a></li>
+                      <li><a class="dropdown-item" href="{% url 'owner_notification'%}">Rental request
+                        {% if notification_count > 0 %}
+                        <div class="notification">{{ notification_count }}</div>
+                         {% endif %}
+                      </a></li>
                       <li><a class="dropdown-item" href="">Bookings update</a></li>
                     </ul>
               <li class="nav-item dropdown">
