@@ -202,6 +202,38 @@ def hire_car(request, pk):
 def success(request):
     return render(request,'accounts/success.html' )
 
+@login_required(login_url='login')
+def update_hire(request, pk):
+    hire = get_object_or_404(Hire, pk=pk)
+    form = HireForm(instance=hire)
+
+    if request.method == 'POST':
+        form = HireForm(request.POST, instance=hire)
+        if form.is_valid():
+            form.save()
+            return redirect('success')
+
+    context = {
+        'form': form,
+        'hire': hire
+    }
+
+    return render(request, 'accounts/update_hire.html', context)
+
+@login_required(login_url='login')
+def delete_hire(request, pk):
+    hire = get_object_or_404(Hire, pk=pk)
+
+    if request.method == 'POST':
+        hire.delete()
+        return redirect('success')
+
+    context = {
+        'hire': hire
+    }
+
+    return render(request, 'accounts/delete_hire.html', context)
+
 
 def home(request):
     return render(request,'accounts/home.html')
