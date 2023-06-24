@@ -37,8 +37,8 @@
                     Hire Management
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="">Booking Calendar</a></li>
-                    <li><a class="dropdown-item" href="">Hire history</a></li>
+                    <li><a class="dropdown-item" href="">Approved Requests</a></li>
+                    <li><a class="dropdown-item" href="{% url 'hiring_history' %}">Hire history</a></li>
                   </ul>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,13 +46,20 @@
                     
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{% url 'owner_notification'%}">Rental request
-                        {% if notification_count > 0 %}
-                        <div class="notification">{{ notification_count }}</div>
-                         {% endif %}
-                      </a></li>
+                      <li>
+                          <a class="dropdown-item" href="{% url 'owner_notification'%}">Rental request
+                              {% if notification_count > 0 and user.is_authenticated %}
+                                  {% for hire in pending_hires %}
+                                      {% if hire.car.owner == user %}
+                                          <div class="notification">{{ notification_count }}</div>
+                                      {% endif %}
+                                  {% endfor %}
+                              {% endif %}
+                          </a>
+                      </li>
                       <li><a class="dropdown-item" href="">Bookings update</a></li>
-                    </ul>
+                  </ul>
+                  
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Profile

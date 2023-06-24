@@ -144,7 +144,7 @@ def updateCar(request, pk):
      car = Car.objects.get(id=pk)
      form = CarForm(instance=car)
      if request.user != car.owner:
-          return HttpResponse('You are not allowed here!!')
+          return HttpResponse('<h1 style="color: red;">You are not allowed here!!!</h1>')
 
      if request.method == 'POST':
           form = CarForm(request.POST, instance=car)
@@ -158,7 +158,7 @@ def updateCar(request, pk):
 def deleteCar(request, pk):
      car = Car.objects.get(id=pk)
      if request.user != car.owner:
-          return HttpResponse('You are not allowed here!!')
+          return HttpResponse('<h1 style="color: red;">You are not allowed here!!!</h1>')
      if request.method == 'POST':
           car.delete()
           return redirect('owner_dashboard')  

@@ -38,14 +38,26 @@ def owner_car_list(request):
 
     return render(request, 'Owner/owner_car_list.html', context)
 
+@login_required(login_url='login')
+def hiring_history(request):
+    user = request.user
+    cars = Car.objects.filter(owner=user)
+    hires = Hire.objects.filter(car__in=cars)
+    return render(request, 'Owner/hiring_history.html', {'hires': hires})
+
+
 
 
 def owner_notification(request):
-    pending_hires = Hire.objects.filter(is_approved=False, is_rejected=False).order_by('-id')
+    user = request.user
+    owned_cars = Car.objects.filter(owner=user)
+    pending_hires = Hire.objects.filter(car__in=owned_cars, is_approved=False, is_rejected=False).order_by('-id')
 
     notification_count = pending_hires.count()
+  
 
     return render(request, 'Owner/owner_notification.html', {'pending_hires': pending_hires, 'notification_count': notification_count})
+
 
 
 
