@@ -189,7 +189,7 @@ def hire_car(request, pk):
             hire.car = car
             hire.customer = user
             hire.save()
-            return redirect('customer_dashboard')
+            return redirect('success')
 
 
     context = {
@@ -198,6 +198,10 @@ def hire_car(request, pk):
     }
 
     return render(request, 'accounts/hire.html' ,context)
+
+def success(request):
+    return render(request,'accounts/success.html' )
+
 
 def home(request):
     return render(request,'accounts/home.html')

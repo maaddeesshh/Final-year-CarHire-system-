@@ -41,10 +41,13 @@ def owner_car_list(request):
 
 
 def owner_notification(request):
-    pending_hires = Hire.objects.filter(is_approved=False, is_rejected=False)
-    
+    pending_hires = Hire.objects.filter(is_approved=False, is_rejected=False).order_by('-id')
 
-    return render(request, 'Owner/owner_notification.html', {'pending_hires': pending_hires})
+    notification_count = pending_hires.count()
+
+    return render(request, 'Owner/owner_notification.html', {'pending_hires': pending_hires, 'notification_count': notification_count})
+
+
 
 def approve_hire(request, pk):
     hire = get_object_or_404(Hire, pk=pk)
