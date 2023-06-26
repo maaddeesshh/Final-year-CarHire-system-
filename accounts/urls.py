@@ -28,6 +28,10 @@ urlpatterns = [
     path ('delete/<str:pk>/',views.deleteCar, name='delete_car'),
     path ('hire/<str:pk>/',views.hire_car,name="hire"),
     path ('hire_success',views.success,name="success"),
+    path('hire_success_update/<str:pk>/', views.update_hire, name='update-hire'),
+
+    # path('hire/update/<int:pk>/', views.update_hire, name='update-hire'),
+
     # path('admin/',views.admin_dashboard,name="admin_dashboard"),
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"),name="reset_password"),
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(template_name="accounts/password_reset_sent.html"),name="password_reset_done"),

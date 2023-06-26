@@ -203,8 +203,9 @@ def success(request):
     return render(request,'accounts/success.html' )
 
 @login_required(login_url='login')
-def update_hire(request, pk):
-    hire = get_object_or_404(Hire, pk=pk)
+def update_hire(request,pk):
+    hire = Hire.objects.get(id=int(pk))
+
     form = HireForm(instance=hire)
 
     if request.method == 'POST':
@@ -215,7 +216,8 @@ def update_hire(request, pk):
 
     context = {
         'form': form,
-        'hire': hire
+        'hire': hire,
+       
     }
 
     return render(request, 'accounts/update_hire.html', context)
