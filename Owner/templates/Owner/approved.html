@@ -1,0 +1,26 @@
+{% if approved_hires %}
+    <table>
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Car</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hire in approved_hires %}
+                <tr>
+                    <td>{{ hire.customer.username }}</td>
+                    <td>{{ hire.car.reg_no }}</td>
+                    <td>{{ hire.start_date }}</td>
+                    <td>{{ hire.end_date }}</td>
+                    <td>{{ hire.phone_no }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No approved hire requests found.</p>
+{% endif %}

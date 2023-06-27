@@ -127,6 +127,7 @@ def deleteAccount(request):
 
 
 def customerPage(request):
+    
     cars = Car.objects.all()
     context = {'cars':cars} 
     return render(request, 'accounts/customer_dashboard.html',context)
@@ -201,23 +202,27 @@ def hire_car(request, pk):
 
 def success(request):
     return render(request,'accounts/success.html' )
+@login_required(login_url='login')
+def customer_hire_requests(request):
+    user = request.user
+    hires = Hire.objects.filter(customer=user)
+    return render(request, 'accounts/customer_hire_requests.html', {'hires': hires})
+
 
 @login_required(login_url='login')
-def update_hire(request,pk):
-    hire = Hire.objects.get(id=int(pk))
-
+def update_hire(request, pk):
+    hire = get_object_or_404(Hire, pk=pk)
     form = HireForm(instance=hire)
 
     if request.method == 'POST':
         form = HireForm(request.POST, instance=hire)
         if form.is_valid():
             form.save()
-            return redirect('success')
+            return redirect('customer_dashboard')
 
     context = {
         'form': form,
         'hire': hire,
-       
     }
 
     return render(request, 'accounts/update_hire.html', context)
@@ -225,16 +230,27 @@ def update_hire(request,pk):
 @login_required(login_url='login')
 def delete_hire(request, pk):
     hire = get_object_or_404(Hire, pk=pk)
+    hire.delete()
+    return redirect('customer_dashboard')
 
-    if request.method == 'POST':
-        hire.delete()
-        return redirect('success')
 
+
+def approved_hire_list(request):
+    # Get the current logged-in user (customer)
+    customer = request.user
+    
+    # Retrieve the approved hire requests for the customer
+    approved_hires = Hire.objects.filter(customer=customer, is_approved=True)
+    
     context = {
-        'hire': hire
+        'approved_hires': approved_hires
     }
+    
+    return render(request, 'accounts/approved_hire_list.html', context)
 
-    return render(request, 'accounts/delete_hire.html', context)
+
+    
+
 
 
 def home(request):

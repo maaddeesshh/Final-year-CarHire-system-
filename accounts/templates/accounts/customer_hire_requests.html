@@ -1,0 +1,24 @@
+<table>
+    <thead>
+      <tr>
+        <th>Car</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for hire in hires %}
+      <tr>
+        <td>{{ hire.car.reg_no }}</td>
+        <td>{{ hire.start_date }}</td>
+        <td>{{ hire.end_date }}</td>
+        <td>
+          <a href="{% url 'update-hire' pk=hire.pk %}">Update</a>
+          <a href="{% url 'delete-hire' pk=hire.pk %}">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  

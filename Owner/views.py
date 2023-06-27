@@ -61,19 +61,29 @@ def owner_notification(request):
 
 
 
-def approve_hire(request, pk):
-    hire = get_object_or_404(Hire, pk=pk)
-    hire.is_approved = True
-    hire.save()
-    # You can add a success message to the session variable
-    request.session['notification'] = 'Hire request approved successfully.'
-    return redirect('owner_dashboard')
 
-def reject_hire(request, pk):
-    hire = get_object_or_404(Hire, pk=pk)
+def approve_hire(request, hire_id):
+    hire = get_object_or_404(Hire, pk=hire_id)
+    hire.is_approved = True
+    hire.is_rejected = False
+    hire.save()
+    return redirect('owner_dashboard')  # Replace with the appropriate URL for the hire list
+
+def reject_hire(request, hire_id):
+    hire = get_object_or_404(Hire, pk=hire_id)
+    hire.is_approved = False
     hire.is_rejected = True
     hire.save()
-    # You can add a success message to the session variable
-    request.session['notification'] = 'Hire request rejected.'
-    return redirect('owner_dashboard')
+    return redirect('owner_dashboard')  # Replace with the appropriate URL for the hire list
 
+
+def approved(request):
+    # Retrieve all approved hire requests
+    approved_hires = Hire.objects.filter(is_approved=True)
+
+    # Pass the approved hires to the template context
+    context = {
+        'approved_hires': approved_hires
+    }
+
+    return render(request, 'Owner/approved.html', context)

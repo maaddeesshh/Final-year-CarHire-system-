@@ -33,7 +33,7 @@
                     Notifications
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="">Booking update</a></li>
+                    <li><a class="dropdown-item" href="{% url 'approved_hire_list' %}">Booking Status</a></li>
                    
                   </ul>
               <li class="nav-item dropdown">
@@ -46,15 +46,17 @@
                 </ul>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'request' %}"> Hire Requests</a>
+              </li>
+
+              <li class="nav-item">
                 <a class="nav-link" href="{%url 'contact' %}"> Support</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'logout'%}"> Logout</a>
               </li> 
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            </form>
+            
           </div>
         </div>
       </nav>

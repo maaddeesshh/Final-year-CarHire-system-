@@ -65,8 +65,8 @@
                 <td>{{ hire.end_date }}</td>
                 <td>{{ hire.phone_no }}</td>
                 <td>
-                    <a href="{}" class="btn btn-success">Approve</a>
-                    <a href="{}" class="btn btn-danger">Reject</a>
+                    <a href="{% url 'approve_hire' hire_id=hire.id %}" class="btn btn-success">Approve</a>
+                    <a href="{% url 'reject_hire' hire_id=hire.id %}" class="btn btn-danger">Reject</a>
                 </td>
             </tr>
             {% endfor %}
