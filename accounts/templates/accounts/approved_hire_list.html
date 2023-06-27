@@ -1,12 +1,32 @@
-{% for hire in approved_hires %}
-    <div>
-        <h4>Approved Hire Request:</h4>
-        <p>Car: {{ hire.car.reg_no }}</p>
-        <p>Start Date: {{ hire.start_date }}</p>
-        <p>End Date: {{ hire.end_date }}</p>
-        <p>Phone Number: {{ hire.phone_no }}</p>
-        <hr>
-    </div>
-{% empty %}
-    <p>No approved hire requests found.</p>
-{% endfor %}
+
+     <table>
+        <thead>
+            <tr>
+                <th>Car</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hire in approved_hires %}
+            <tr>
+                <td>{{ hire.car.reg_no }}</td>
+                <td>{{ hire.start_date }}</td>
+                <td>{{ hire.end_date }}</td>
+                <td>{{ hire.phone_no }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No approved hire requests found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>  
+
+
+
+
+
+
+
