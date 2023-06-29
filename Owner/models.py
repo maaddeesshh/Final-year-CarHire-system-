@@ -25,4 +25,4 @@ class Car(models.Model):
   
 
     def __str__(self):
-        return self.owner.username
+        return self.reg_no
