@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'Owner.apps.OwnerConfig',
-    'Hire.apps.HireConfig'
+    'Hire.apps.HireConfig',
+    
    
 ]
 
@@ -149,6 +150,16 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'eugenemadegwa04@gmail.com'
 EMAIL_HOST_PASSWORD = 'gopmusmmjledsdcz'
 
+# Hire Approval Email Configuration
+HIRE_APPROVAL_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+HIRE_APPROVAL_EMAIL_HOST = 'smtp.gmail.com'
+HIRE_APPROVAL_EMAIL_PORT = 587
+HIRE_APPROVAL_EMAIL_USE_TLS = True
+HIRE_APPROVAL_EMAIL_HOST_USER = 'carhire172@gmail.com'  # Email address for password recovery
+HIRE_APPROVAL_EMAIL_HOST_PASSWORD = 'swajrjjbhfmuhogq'  # Password for the password recovery email
+HIRE_APPROVAL_EMAIL_SUBJECT = 'Hire Request Approved'  # Subject of the hire approval notification email
+
 # settings.py
+
 
 

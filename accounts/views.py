@@ -21,6 +21,8 @@ from Hire.models import Hire
 from datetime import date
 
 
+
+
 #authenticate, login user
 def LoginPage(request):
      page = 'login'
@@ -56,6 +58,10 @@ def logoutUser(request):
 #register a new user
 def registerPage(request):
      msg = None
+     msg1 = None
+     msg2 = None
+     msg3 = None
+     msg5 = None
      if request.user.is_authenticated: #if a user is already authenticated, take the user to homepage
           return redirect('home')
      form= MyUserCreationForm() #assign variable form to MyUserCreationForm, in forms.py
@@ -67,8 +73,12 @@ def registerPage(request):
                user.save() #save user
                return redirect('login')
           else:
-               msg= 'An error occurred during registration' 
-     return render(request, 'accounts/login_register.html', {'form':form, 'msg':msg})
+               msg= 'Your password should be alphanumeric'
+               msg2='First letter of the password should be capital'
+               msg3=' Password must contain a special character (@, $, !, &, etc).'
+               msg1=' Password length must be greater than 8 characters.' 
+               msg5 ='Enter same password for verification and provide a unique email'
+     return render(request, 'accounts/login_register.html', {'form':form, 'msg':msg, 'msg2':msg2,'msg':msg,'msg3':msg3, 'msg1':msg1, 'msg5':msg5})
 @login_required(login_url='login')  #to ensure the request user is authenticated and is logged in
 #owner  update profile 
 def OwnerUpdateProfile(request):
@@ -247,10 +257,6 @@ def approved_hire_list(request):
     }
     
     return render(request, 'accounts/approved_hire_list.html', context)
-
-
-    
-
 
 
 def home(request):

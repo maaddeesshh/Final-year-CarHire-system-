@@ -60,7 +60,14 @@
               {%csrf_token%}
             <span>
                 {% if msg %}
+                <ul style="color: red;">
+                  <li>
                     {{msg}}
+                  </li>
+
+                </ul>
+                
+                    
                 {% endif %}
               </span>
               <div class="form__group form__group">
@@ -123,8 +130,16 @@
             <form class="form" method="POST" action="#">
               {%csrf_token%}
             <span>
-                {% if msg %}
-                    {{msg}}
+                {% if msg and msg1 and msg2 and msg3 and msg5 %}
+                <ol style="color: red;">
+                  <li>{{msg}}</li>
+                  <li>{{msg1}}</li>
+                  <li>{{msg2}}</li>
+                  <li>{{msg3}}</li>
+                  <li>{{msg5}}</li>
+
+                </ol>
+                    
                 {% endif %}
               </span>
               {% for field in form %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import send_hire_approval_email
 
 urlpatterns = [
     path ('owner_add_car/',views.CreateCar, name='CreateCar'),
@@ -10,6 +11,8 @@ urlpatterns = [
     path('owner_rental_requests_reject/<int:hire_id>/', views.reject_hire, name='reject_hire'),
     path('owner_approved_requests/', views.approved, name='approved'),
     path('owner_hiring_history/', views.hiring_history, name='hiring_history'),
+    path('send_hire_approval_email/<int:hire_id>/', views.send_hire_approval_email, name='send_hire_approval_email'),
+
 
 
     # path ('edit/<str:pk>/',views.updateCar, name='update_car'),

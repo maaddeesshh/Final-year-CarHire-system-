@@ -1,6 +1,2 @@
 
 
-# Create your views here.
-
-
-
