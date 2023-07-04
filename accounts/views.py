@@ -19,6 +19,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from Hire.models import Hire
 from datetime import date
+from datetime import timedelta
 
 
 
@@ -175,10 +176,45 @@ def deleteCar(request, pk):
           return redirect('owner_dashboard')  
      return render(request, 'accounts/delete.html', {'obj':car})
 
+# @login_required(login_url='login')
+# def hire_car(request, pk):
+#     car = get_object_or_404(Car, pk=pk)
+#     user = user=request.user
+#     form = HireForm()
+
+#     if request.method == 'POST':
+#         form = HireForm(request.POST)
+#         if form.is_valid():
+#             start_date = form.cleaned_data['start_date']
+#             end_date = form.cleaned_data['end_date']
+
+#             if end_date < start_date:
+#                 return render(request, 'accounts/hire.html', {'form': form, 'book_error': 'End date cannot be earlier than the start date'})
+
+#             # Get all future hires
+#             booked_times = Hire.objects.filter(car=car, end_date__gte=date.today(), is_approved=True)
+            
+#             if booked_times.exists():
+#                 return render(request, 'accounts/hire.html', {'form': form, 'booked_times': booked_times})
+
+#             hire = form.save(commit=False)
+#             hire.car = car
+#             hire.customer = user
+#             hire.save()
+#             return redirect('success')
+
+
+#     context = {
+#         'form': form,
+#         'car': car
+#     }
+
+#     return render(request, 'accounts/hire.html' ,context)
+
 @login_required(login_url='login')
 def hire_car(request, pk):
     car = get_object_or_404(Car, pk=pk)
-    user = user=request.user
+    user = request.user
     form = HireForm()
 
     if request.method == 'POST':
@@ -190,11 +226,17 @@ def hire_car(request, pk):
             if end_date < start_date:
                 return render(request, 'accounts/hire.html', {'form': form, 'book_error': 'End date cannot be earlier than the start date'})
 
-            # Get all future hires
-            booked_times = Hire.objects.filter(car=car, end_date__gte=date.today(), is_approved=True)
-            
-            if booked_times.exists():
-                return render(request, 'accounts/hire.html', {'form': form, 'booked_times': booked_times})
+            # Get all approved hires for the car
+            approved_hires = Hire.objects.filter(car=car, is_approved=True)
+
+            for approved_hire in approved_hires:
+                # Check if the requested hire overlaps with an approved hire
+                if start_date <= approved_hire.end_date and end_date >= approved_hire.start_date:
+                    # Check if the approved hire has already ended
+                    if approved_hire.end_date < date.today() or (end_date + timedelta(days=1)) < approved_hire.start_date:
+                        continue  # Skip the check for this approved hire if it has already ended or the user's end date is a day before the approved hire's start date
+
+                    return render(request, 'accounts/hire.html', {'form': form, 'booked_times': approved_hires})
 
             hire = form.save(commit=False)
             hire.car = car
@@ -202,13 +244,14 @@ def hire_car(request, pk):
             hire.save()
             return redirect('success')
 
-
     context = {
         'form': form,
         'car': car
     }
 
-    return render(request, 'accounts/hire.html' ,context)
+    return render(request, 'accounts/hire.html', context)
+
+
 
 def success(request):
     return render(request,'accounts/success.html' )

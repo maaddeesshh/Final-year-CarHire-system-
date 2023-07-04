@@ -104,39 +104,31 @@ def approved(request):
 def send_hire_approval_email(request, hire_id):
     # Retrieve the Hire object
     hire = Hire.objects.get(id=hire_id)
-    cars = Car.objects.all()
 
-    # Check if the hire is approved
-    if hire.is_approved:
-        # Get the customer's email and other details
-        customer_email = hire.customer.email
-        customer_name = hire.customer.username
-        driver_name = cars.owner.username
+    # Get the customer's email and other details
+    customer_email = hire.customer.email
+    customer_name = hire.customer.username
 
-        car = cars.reg_no
-        hire_schedule = hire.start_date
-        hire_end = hire.end_date
+    # Get the car associated with the hire request
+    car = hire.car
+    driver_name = car.owner.username
 
-        # Prepare the email content
-        subject = 'Hire Request Approved'
-        html_message = render_to_string('Owner/approval_notification.html', {
-            'customer_name': customer_name,
-            'hire_start_date': hire_schedule,
-            'hire_end': hire_end,
-            'driver_name': driver_name,
-            'car': car,
-        })
-        plain_message = strip_tags(html_message)
+    hire_schedule = hire.start_date
+    hire_end = hire.end_date
 
-        # Send the email
-        # send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [customer_email], html_message=html_message)
-        send_mail(subject, plain_message, settings.HIRE_APPROVAL_EMAIL_HOST_USER, [customer_email], html_message=html_message)
+    # Prepare the email content
+    subject = 'Hire Request Approved'
+    html_message = render_to_string('Owner/approval_notification.html', {
+        'customer_name': customer_name,
+        'hire_start_date': hire_schedule,
+        'hire_end': hire_end,
+        'driver_name': driver_name,
+        'car': car.reg_no,
+    })
+    plain_message = strip_tags(html_message)
 
+    # Send the email
+    send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [customer_email], html_message=html_message)
 
-
-        # Add any additional logic or redirect the user to an appropriate page
-        return HttpResponseRedirect(reverse('customer_dashboard'))
-    else:
-        # Handle the case where the hire request is not approved
-        # Add appropriate logic or redirect the user to an appropriate page
-        return HttpResponseRedirect(reverse('customer_dashboard'))
+    # Add any additional logic or redirect the user to an appropriate page
+    return HttpResponseRedirect(reverse('customer_dashboard'))
