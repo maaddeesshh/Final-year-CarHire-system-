@@ -14,6 +14,8 @@ from .models import *
 from Owner.models import Car
 from django.shortcuts import render, redirect
 
+from datetime import date
+
 from django.contrib import messages
 
 # Create your views here.
@@ -56,17 +58,36 @@ def hiring_history(request):
 
 
 
+# def owner_notification(request):
+#     user = request.user
+#     owned_cars = Car.objects.filter(owner=user)
+#     pending_hires = Hire.objects.filter(car__in=owned_cars, is_approved=False, is_rejected=False).order_by('-id')
+
+#     notification_count = pending_hires.count()
+  
+
+#     return render(request, 'Owner/owner_notification.html', {'pending_hires': pending_hires, 'notification_count': notification_count})
+
+
+
 def owner_notification(request):
     user = request.user
     owned_cars = Car.objects.filter(owner=user)
     pending_hires = Hire.objects.filter(car__in=owned_cars, is_approved=False, is_rejected=False).order_by('-id')
 
+    current_date = date.today()  # Get the current date
+
+    # Update the pending hires with a flag indicating whether the start date is valid
+    for hire in pending_hires:
+        hire.is_start_date_valid = hire.start_date >= current_date
+
     notification_count = pending_hires.count()
-  
 
-    return render(request, 'Owner/owner_notification.html', {'pending_hires': pending_hires, 'notification_count': notification_count})
-
-
+    return render(request, 'Owner/owner_notification.html', {
+        'pending_hires': pending_hires,
+        'notification_count': notification_count,
+        'current_date': current_date,
+    })
 
 
 
@@ -88,8 +109,8 @@ def reject_hire(request, hire_id):
 
 
 def approved(request):
-    # Retrieve all approved hire requests
-    approved_hires = Hire.objects.filter(is_approved=True)
+    # Retrieve all approved hire requests in descending order of start_date
+    approved_hires = Hire.objects.filter(is_approved=True).order_by('-start_date')
 
     # Pass the approved hires to the template context
     context = {
@@ -97,6 +118,7 @@ def approved(request):
     }
 
     return render(request, 'Owner/approved.html', context)
+
 
 
 

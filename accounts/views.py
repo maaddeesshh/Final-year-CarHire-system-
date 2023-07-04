@@ -258,7 +258,7 @@ def success(request):
 @login_required(login_url='login')
 def customer_hire_requests(request):
     user = request.user
-    hires = Hire.objects.filter(customer=user)
+    hires = Hire.objects.filter(customer=user).order_by('-start_date')
     return render(request, 'accounts/customer_hire_requests.html', {'hires': hires})
 
 
@@ -293,7 +293,7 @@ def approved_hire_list(request):
     customer = request.user
     
     # Retrieve the approved hire requests for the customer
-    approved_hires = Hire.objects.filter(customer=customer, is_approved=True)
+    approved_hires = Hire.objects.filter(customer=customer, is_approved=True).order_by('-start_date')
     
     context = {
         'approved_hires': approved_hires
