@@ -15,6 +15,8 @@ from Owner.models import Car
 from django.shortcuts import render, redirect
 
 from datetime import date
+import random
+import string
 
 from django.contrib import messages
 
@@ -123,9 +125,46 @@ def approved(request):
 
 
 
+# def send_hire_approval_email(request, hire_id):
+#     # Retrieve the Hire object
+#     hire = Hire.objects.get(id=hire_id)
+
+#     # Get the customer's email and other details
+#     customer_email = hire.customer.email
+#     customer_name = hire.customer.username
+
+#     # Get the car associated with the hire request
+#     car = hire.car
+#     driver_name = car.owner.username
+
+#     hire_schedule = hire.start_date
+#     hire_end = hire.end_date
+
+#     # Prepare the email content
+#     subject = 'Hire Request Approved'
+#     html_message = render_to_string('Owner/approval_notification.html', {
+#         'customer_name': customer_name,
+#         'hire_start_date': hire_schedule,
+#         'hire_end': hire_end,
+#         'driver_name': driver_name,
+#         'car': car.reg_no,
+#     })
+#     plain_message = strip_tags(html_message)
+
+#     # Send the email
+#     send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [customer_email], html_message=html_message)
+
+#     # Add any additional logic or redirect the user to an appropriate page
+#     return HttpResponseRedirect(reverse('customer_dashboard'))
+
+
+
 def send_hire_approval_email(request, hire_id):
     # Retrieve the Hire object
     hire = Hire.objects.get(id=hire_id)
+
+    # Generate a service code
+    service_code = generate_service_code()
 
     # Get the customer's email and other details
     customer_email = hire.customer.email
@@ -133,24 +172,36 @@ def send_hire_approval_email(request, hire_id):
 
     # Get the car associated with the hire request
     car = hire.car
+    driver_email = car.owner.email
     driver_name = car.owner.username
 
     hire_schedule = hire.start_date
     hire_end = hire.end_date
 
-    # Prepare the email content
-    subject = 'Hire Request Approved'
-    html_message = render_to_string('Owner/approval_notification.html', {
-        'customer_name': customer_name,
-        'hire_start_date': hire_schedule,
-        'hire_end': hire_end,
-        'driver_name': driver_name,
-        'car': car.reg_no,
-    })
-    plain_message = strip_tags(html_message)
+    # Prepare the email content for the customer
+    customer_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
+    customer_message = 'Dear {},\n\nYour hire request has been approved by the driver.\n\nPlease use the following service code upon your arrival on {}: {}\n\nThank you for choosing our services.'.format(customer_name, hire_schedule, service_code)
 
-    # Send the email
-    send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [customer_email], html_message=html_message)
+    # Prepare the email content for the car owner
+    owner_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
+    owner_message = 'Dear {},\n\nThe hire request from customer {} has been approved.\n\nPlease provide the service with the following service code upon their arrival on {}: {}\n\nThank you for your service.'.format(driver_name, customer_name, hire_schedule, service_code)
+
+    # Send the emails
+    send_mail(customer_subject, customer_message, settings.EMAIL_HOST_USER, [customer_email])
+    send_mail(owner_subject, owner_message, settings.EMAIL_HOST_USER, [driver_email])
 
     # Add any additional logic or redirect the user to an appropriate page
     return HttpResponseRedirect(reverse('customer_dashboard'))
+
+
+
+
+def generate_service_code():
+    # Generate a random service code
+    code_length = 6
+    characters = string.digits
+    service_code = ''.join(random.choice(characters) for _ in range(code_length))
+    return service_code
+
+
+

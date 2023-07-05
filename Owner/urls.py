@@ -12,6 +12,7 @@ urlpatterns = [
     path('owner_approved_requests/', views.approved, name='approved'),
     path('owner_hiring_history/', views.hiring_history, name='hiring_history'),
     path('send_hire_approval_email/<int:hire_id>/', views.send_hire_approval_email, name='send_hire_approval_email'),
+    path('generate-code/', views.generate_service_code, name='generate_code'),
 
 
 

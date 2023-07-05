@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -28,8 +29,10 @@
       <td>{{ hire.start_date }}</td>
       <td>{{ hire.end_date }}</td>
       <td>
-        <a href="{% url 'update-hire' pk=hire.pk %}" class="btn btn-success">Update</a>
-        <a href="{% url 'delete-hire' pk=hire.pk %}" class="btn btn-danger">Delete</a>
+        {% if hire.start_date|date:'Y-m-d' >= today_date|date:'Y-m-d' and not hire.is_approved %}
+          <a href="{% url 'update-hire' pk=hire.pk %}" class="btn btn-success">Update</a>
+          <a href="{% url 'delete-hire' pk=hire.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}
@@ -38,8 +41,6 @@
   
 </body>
 </html>
-
-
 
 
 
