@@ -24,6 +24,7 @@ urlpatterns = [
     path('customer/',views.customerPage,name="customer_dashboard"),
 
     path('customer_approved_hire_list/', views.approved_hire_list, name='approved_hire_list'),
+    path('customer_approved_hire_list_rate/<int:owner_id>/', views.Rate, name='rate_owner'),
     path('customer_update/', views.UpdateProfile, name='update-profile'),
     path('customer_delete/', views.deleteAccount, name='delete-profile'),
     path ('edit/<str:pk>/',views.updateCar, name='update_car'),

@@ -20,6 +20,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from Hire.models import Hire
 from datetime import date
 from datetime import timedelta
+from django.contrib.auth import get_user_model
+from datetime import date
+from accounts.models import *
+from Hire.models import *
+from django.template import loader
+
 
 
 
@@ -287,19 +293,84 @@ def delete_hire(request, pk):
     return redirect('customer_dashboard')
 
 
+# def approved_hire_list(request):
+#     customer = request.user
+#     approved_hires = Hire.objects.filter(customer=customer, is_approved=True).order_by('-start_date')
+    
+#     current_date = date.today()
+
+#     hires_with_rating = []
+#     for hire in approved_hires:
+#         if hire.end_date <= current_date and not Review.objects.filter(customer=customer, owner=hire.car.owner).exists():
+#             hire.can_rate = True
+#         else:
+#             hire.can_rate = False
+#         hires_with_rating.append(hire)
+
+#     context = {
+#         'approved_hires': hires_with_rating,
+#         'current_date': current_date,
+#     }
+#     return render(request, 'accounts/approved_hire_list.html', context)
+
+
 
 def approved_hire_list(request):
-    # Get the current logged-in user (customer)
     customer = request.user
-    
-    # Retrieve the approved hire requests for the customer
     approved_hires = Hire.objects.filter(customer=customer, is_approved=True).order_by('-start_date')
     
+    current_date = date.today()
+
+    hires_with_rating = []
+    for hire in approved_hires:
+        if hire.end_date <= current_date and not Review.objects.filter(customer=customer, owner=hire.car.owner).exists():
+            hire.can_rate = True
+        else:
+            hire.can_rate = False
+        hires_with_rating.append(hire)
+
     context = {
-        'approved_hires': approved_hires
+        'approved_hires': hires_with_rating,
+        'current_date': current_date,
     }
-    
     return render(request, 'accounts/approved_hire_list.html', context)
+
+
+
+
+def Rate(request, owner_id):
+    owner = get_user_model().objects.get(id=owner_id)
+    user = request.user
+
+    current_date = date.today()  # Get the current date
+
+    approved_hires = Hire.objects.filter(customer=user, is_approved=True).order_by('-start_date')
+
+    if request.method == 'POST':
+        form = RateForm(request.POST)
+        if form.is_valid():
+            rate = form.save(commit=False)
+            rate.customer = user  # Set the customer field with the current user
+            rate.owner = owner
+            rate.save()
+            return redirect('customer_dashboard')
+    else:
+        form = RateForm()
+
+    context = {
+        'form': form,
+        'owner': owner,
+        'current_date': current_date,  # Pass the current date to the template context
+        'approved_hires': approved_hires,
+    }
+
+    return render(request, 'accounts/rate_owner.html', context)
+
+
+
+
+
+ 
 
 
 def home(request):

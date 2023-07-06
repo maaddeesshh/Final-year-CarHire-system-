@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Owner.apps.OwnerConfig',
     'Hire.apps.HireConfig',
     
+    
    
 ]
 

@@ -15,7 +15,7 @@
      
   <form method="POST" action="">
     {% csrf_token %}
-    {{ form.as_p }}
+   <div class="form-control">{{ form.as_p }}</div> 
     {% if book_error %}
       <p class="error">{{ book_error }}</p>
     {% endif %}
