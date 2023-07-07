@@ -71,6 +71,37 @@
           text-align: center;
           font-style: italic;
       }
+      @keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animated-greeting {
+  animation: pulse 1s infinite;
+}
+.dashboard-heading {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
   </style>
 </head>
 <body>
@@ -107,8 +138,13 @@
     </div>
 
     <div class="content">
-        <h1>Customer Dashboard</h1>
-        <p><i><b>Hello {{ user.username }}</b></i></p>
+      <!-- <h1 style="font-size: 32px; color: #333; font-weight: bold; text-align: center; margin-top: 20px;">Customer Dashboard</h1> -->
+      <h1 class="dashboard-heading">Customer Dashboard</h1>
+
+
+        
+        <p class="animated-greeting"><i><b>Hello {{ user.username }}</b></i></p>
+
 
         <div class="row">
             {% for car in cars %}
