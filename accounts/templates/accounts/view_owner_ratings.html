@@ -12,31 +12,21 @@
   <div class="card  mx-auto my-5" style="width: 50%;">
     <img src="{% static 'images/img3.jpg'%}" class="card-img-top" alt="...">
     <div class="card-body">
+        <h1>Owner Ratings</h1>
+{% for owner_rating in owner_ratings %}
+    <h3>{{ owner_rating.owner.username }}</h3>
+    {% if owner_rating.overall_rating %}
+        <p>Overall Rating: {{ owner_rating.overall_rating|floatformat:1 }}</p>
+        <p>Phone Number: {{ owner_rating.phone_number }}</p>
+        <p>Phone Number: {{ owner_rating.owner.phone_no }}</p>
+    {% else %}
+        <p>No ratings yet.</p>
+    {% endif %}
+{% endfor %}
      
-  <form method="POST" action="">
-    {% csrf_token %}
-   <div class="form-control">{{ form.as_p }}</div> 
-    {% if book_error %}
-      <p class="error">{{ book_error }}</p>
-    {% endif %}
-    {% if booked_times %}
-      <h2>Booked Times:</h2>
-      <ul>
-        {% for booked_time in booked_times %}
-          <li>{{ booked_time.start_date }} - {{ booked_time.end_date }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <button type="submit" class="btn btn-success"> Hire Car</button>
     <!-- <button type="submit">Hire Car</button> -->
-  </form>
+  
   </div>
   
 </body>
 </html>
-
-
-
-
-
-

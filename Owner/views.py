@@ -17,6 +17,11 @@ from django.shortcuts import render, redirect
 from datetime import date
 import random
 import string
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 
 from django.contrib import messages
 
@@ -100,7 +105,7 @@ def approve_hire(request, hire_id):
     hire.save()
      # Send the hire approval email
     send_hire_approval_email(request, hire_id)
-    return redirect('owner_dashboard')  # Replace with the appropriate URL for the hire list
+    return redirect('congrats')  # Replace with the appropriate URL for the hire list
 
 def reject_hire(request, hire_id):
     hire = get_object_or_404(Hire, pk=hire_id)
@@ -163,28 +168,30 @@ def send_hire_approval_email(request, hire_id):
     # Retrieve the Hire object
     hire = Hire.objects.get(id=hire_id)
 
-    # Generate a service code
-    service_code = generate_service_code()
+    if hire.is_approved is True:
 
-    # Get the customer's email and other details
-    customer_email = hire.customer.email
-    customer_name = hire.customer.username
+        #Generate service code
+        service_code = generate_service_code()
 
-    # Get the car associated with the hire request
-    car = hire.car
-    driver_email = car.owner.email
-    driver_name = car.owner.username
+        # Get the customer's email and other details
+        customer_email = hire.customer.email
+        customer_name = hire.customer.username
 
-    hire_schedule = hire.start_date
-    hire_end = hire.end_date
+         # Get the car associated with the hire request
+        car = hire.car
+        driver_email = car.owner.email
+        driver_name = car.owner.username
+
+        hire_schedule = hire.start_date
+        hire_end = hire.end_date
 
     # Prepare the email content for the customer
-    customer_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
-    customer_message = 'Dear {},\n\nYour hire request has been approved by the driver.\n\nPlease use the following service code upon your arrival on {}: {}\n\nThank you for choosing our services.'.format(customer_name, hire_schedule, service_code)
+        customer_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
+        customer_message = 'Dear {},\n\nYour hire request has been approved by the driver.\n\nPlease use the following service code upon your arrival on {}: {}\n\nThank you for choosing our services.'.format(customer_name, hire_schedule, service_code)
 
     # Prepare the email content for the car owner
-    owner_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
-    owner_message = 'Dear {},\n\nThe hire request from customer {} has been approved.\n\nPlease provide the service with the following service code upon their arrival on {}: {}\n\nThank you for your service.'.format(driver_name, customer_name, hire_schedule, service_code)
+        owner_subject = 'Hire Request Approved - Service Code: {}'.format(service_code)
+        owner_message = 'Dear {},\n\nThe hire request from customer {} has been approved.\n\nPlease provide the service with the following service code upon their arrival on {}: {}\n\nThank you for your service.'.format(driver_name, customer_name, hire_schedule, service_code)
 
     # Send the emails
     send_mail(customer_subject, customer_message, settings.EMAIL_HOST_USER, [customer_email])
@@ -205,3 +212,5 @@ def generate_service_code():
 
 
 
+def congrats(request):
+    return render(request,'Owner/congrats.html')

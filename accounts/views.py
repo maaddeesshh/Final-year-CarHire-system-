@@ -25,6 +25,9 @@ from datetime import date
 from accounts.models import *
 from Hire.models import *
 from django.template import loader
+from django.db.models import Avg, Count
+from django.contrib.auth.models import Group
+
 
 
 
@@ -144,8 +147,8 @@ def deleteAccount(request):
 
 
 def customerPage(request):
-    
     cars = Car.objects.all()
+   
     context = {'cars':cars} 
     return render(request, 'accounts/customer_dashboard.html',context)
 
@@ -257,10 +260,10 @@ def hire_car(request, pk):
 
     return render(request, 'accounts/hire.html', context)
 
-
-
 def success(request):
     return render(request,'accounts/success.html' )
+
+
 @login_required(login_url='login')
 def customer_hire_requests(request):
     user = request.user
@@ -368,9 +371,61 @@ def Rate(request, owner_id):
 
 
 
+def owner_rating(request):
+    owner = request.user
+
+    # Calculate the overall rating
+    overall_rating = Review.objects.filter(owner=owner).aggregate(Avg('rate'))['rate__avg']
+
+    context = {
+        'owner': owner,
+        'overall_rating': overall_rating,
+    }
+
+    return render(request, 'accounts/owner_rating.html', context)
 
 
- 
+
+
+
+
+# def view_owner_ratings(request):
+#     group_name = 'owner'  # The name of the group for owners
+#     owners_group = Group.objects.get(name=group_name)
+#     owners = owners_group.user_set.all()
+#     owner_ratings = []
+#     for owner in owners:
+#         overall_rating = Review.objects.filter(owner=owner).aggregate(Avg('rate'))['rate__avg']
+#         owner_ratings.append({
+#             'owner': owner,
+#             'overall_rating': overall_rating,
+#         })
+#     context = {
+#         'owner_ratings': owner_ratings,
+#     }
+#     return render(request, 'accounts/view_owner_ratings.html', context)
+def view_owner_ratings(request):
+    group_name = 'owner'  # The name of the group for owners
+    owners_group = Group.objects.get(name=group_name)
+    owners = owners_group.user_set.annotate(num_cars=Count('car'))
+    owner_ratings = []
+    for owner in owners:
+        overall_rating = Review.objects.filter(owner=owner).aggregate(Avg('rate'))['rate__avg']
+        car = Car.objects.filter(owner=owner).first()
+        phone_number = car.phone_no if car else None  # Fetch the phone number from the associated Car object
+        owner_ratings.append({
+            'owner': owner,
+            'overall_rating': overall_rating,
+            'phone_number': phone_number
+            
+        })
+
+    context = {
+        'owner_ratings': owner_ratings,
+    }
+    return render(request, 'accounts/view_owner_ratings.html', context)
+
+
 
 
 def home(request):

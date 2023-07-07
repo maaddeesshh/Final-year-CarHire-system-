@@ -21,6 +21,7 @@ urlpatterns = [
     path('owner/',views.ownerPage,name="owner_dashboard"),
     path('owner_update/', views.OwnerUpdateProfile, name='owner-update-profile'),
     path('owner_delete/', views.OwnerdeleteAccount, name='owner-delete-profile'),
+    path('owner_rating/', views.owner_rating, name='owner-rating'),
     path('customer/',views.customerPage,name="customer_dashboard"),
 
     path('customer_approved_hire_list/', views.approved_hire_list, name='approved_hire_list'),
@@ -31,11 +32,17 @@ urlpatterns = [
     path ('delete/<str:pk>/',views.deleteCar, name='delete_car'),
     path ('hire/<str:pk>/',views.hire_car,name="hire"),
     path ('hire_success',views.success,name="success"),
+  
+
+    path('customer_owner_ratings/', views.view_owner_ratings, name='owner_ratings'),
+
+
     path('customer_notification', views.customer_hire_requests, name="request"),
     # path('customer_location/', views.location, name='location'),
     # path('hire_success_update/<str:pk>/', views.update_hire, name='update-hire'),
     path('customer_notification_update_hire/<int:pk>/', views.update_hire, name='update-hire'),
     path('customer_notification_delete_hire/<int:pk>/', views.delete_hire, name='delete-hire'),
+    
     
 
     # path('hire/update/<int:pk>/', views.update_hire, name='update-hire'),

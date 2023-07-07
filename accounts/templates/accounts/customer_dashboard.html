@@ -53,6 +53,9 @@
                 <a class="nav-link" href="{%url 'contact' %}"> Support</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{%url 'owner_ratings' %}"> Owner Ratings</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="{%url 'logout'%}"> Logout</a>
               </li> 
             </ul>
@@ -76,9 +79,12 @@
 
                 <div class="card-body">
                   <h5 class="card-title">{{car.reg_no}}</h5>
-                  <h5 class="card-title">{{car.phone_no}}</h5>
+                  <h5 class="card-title">{{car.phone_no}}</h5>    
                   <p class="card-text">{{car.description}}</p>
+
                   <a href="{%url 'hire' car.id %}" class="btn btn-primary mb-2">Hire</a>
+                  
+
                 </div>
             </div>
         </div>
