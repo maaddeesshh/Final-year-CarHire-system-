@@ -1,0 +1,39 @@
+/* Styling for Contact Cards */
+.contact-card {
+    transition: transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Styling for About Us Section */
+  .about-us {
+    margin-bottom: 50px;
+  }
+  
+  .about-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .about-content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+  }
+  
+  .about-content h2 {
+    margin-bottom: 20px;
+  }
+  
+  .about-content p {
+    margin-bottom: 10px;
+  }
+  
+  .about-content .btn-primary {
+    margin-top: 20px;
+  }
+  

@@ -1,27 +1,89 @@
-{%extends 'main.html'%}
-{%load static%}
 
-{%block content%}
+
+
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
 <div id="carouselExampleAutoplaying" class="carousel slide container my-5" data-bs-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active c-item">
-        <img src="{% static 'images/img1.jpg'%}" class="d-block w-100 c-image" alt="...">
-      </div>
-      <div class="carousel-item c-item">
-        <img src="{% static 'images/img2.jpg'%}" class="d-block w-100 c-image" alt="...">
-      </div>
-      <div class="carousel-item c-item">
-        <img src="{% static 'images/img3.jpg'%}" class="d-block w-100 c-image" alt="...">
-      </div>
+        <div class="carousel-item active c-item">
+            <img src="{% static 'images/img1.jpg'%}" class="d-block w-100 c-image" alt="...">
+        </div>
+        <div class="carousel-item c-item">
+            <img src="{% static 'images/img2.jpg'%}" class="d-block w-100 c-image" alt="...">
+        </div>
+        <div class="carousel-item c-item">
+            <img src="{% static 'images/img3.jpg'%}" class="d-block w-100 c-image" alt="...">
+        </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
     </button>
-  </div>
+</div>
 
-{% endblock%}
+<section class="about-us container">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'images/img3.jpg'%}" alt="" class="about-image">
+        </div>
+        <div class="col-md-6">
+            <div class="about-content">
+                <h2>Welcome to carHire</h2>
+                <p>At carHire, we understand that relocation can be a challenging process, and transportation is a vital aspect of settling into a new place. Whether you're moving across the country or internationally, we are here to provide you with a hassle-free and reliable car rental solution. Our dedicated team is committed to making your transition smoother and more enjoyable.</p>
+                <a class="btn btn-primary" href="{% url 'AboutUs' %}" role="button">Read More</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact container my-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card h-100 contact-card">
+                <img src="{% static 'images/img1.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">General Inquiries:</h5>
+                    <p class="card-text">Email: eugenemadegwa04@gmail.com</p>
+                    <p class="card-text">Phone: +254717548446</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Contact Us</small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 contact-card">
+                <img src="{% static 'images/img3.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Customer and Owner Support:</h5>
+                    <p class="card-text">Email: support@carHire.com</p>
+                    <p class="card-text">Phone: +251114327391</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Contact Us</small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 contact-card">
+                <img src="{% static 'images/img5.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Office Address:</h5>
+                    <p class="card-text">123 Main Street</p>
+                    <p class="card-text">Nairobi, 00100</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Contact Us</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
