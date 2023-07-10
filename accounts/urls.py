@@ -42,6 +42,7 @@ urlpatterns = [
     # path('hire_success_update/<str:pk>/', views.update_hire, name='update-hire'),
     path('customer_notification_update_hire/<int:pk>/', views.update_hire, name='update-hire'),
     path('customer_notification_delete_hire/<int:pk>/', views.delete_hire, name='delete-hire'),
+    path ('location/',views.location_view,name="map"),
     
     
 

@@ -428,6 +428,11 @@ def view_owner_ratings(request):
 
 
 
+def location_view(request):
+    return render(request, 'accounts/location.html')
+
+
+
 def home(request):
     return render(request,'accounts/home.html')
 

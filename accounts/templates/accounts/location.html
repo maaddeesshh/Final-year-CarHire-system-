@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Location</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #map {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        #address {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #buttons {
+            text-align: center;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #337ab7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #23527c;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Location</h1>
+
+    <div id="map"></div>
+
+    <div id="address"></div>
+
+    <div id="buttons">
+        <button id="startTracking" class="button">Start Tracking</button>
+        <button id="stopTracking" class="button">Stop Tracking</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        $(document).ready(function() {
+            var map = null;
+            var marker = null;
+            var watchId = null;
+
+            // Handle start tracking button click event
+            $('#startTracking').click(function() {
+                if (navigator.geolocation) {
+                    watchId = navigator.geolocation.watchPosition(showPosition);
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+
+            // Handle stop tracking button click event
+            $('#stopTracking').click(function() {
+                if (navigator.geolocation && watchId) {
+                    navigator.geolocation.clearWatch(watchId);
+                    watchId = null;
+                }
+            });
+
+            // Display user's position on the map
+            function showPosition(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                // Display the latitude and longitude values
+                var locationDiv = document.getElementById('address');
+                locationDiv.innerHTML = 'Loading...';
+
+                // Create a map instance
+                if (!map) {
+                    map = L.map('map').setView([lat, lng], 18);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                        maxZoom: 20,
+                    }).addTo(map);
+                }
+
+                // Add a marker at the user's location
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker([lat, lng]).addTo(map);
+
+                // Reverse geocoding to get the address
+                $.get('https://nominatim.openstreetmap.org/reverse', {
+                    format: 'json',
+                    lat: lat,
+                    lon: lng,
+                    zoom: 18,
+                }).done(function(response) {
+                    if (response && response.address) {
+                        var address = response.address;
+                        var locationString = address.house_number ? address.house_number + ' ' : '';
+                        locationString += address.road ? address.road + ', ' : '';
+                        locationString += address.city ? address.city + ', ' : '';
+                        locationString += address.state ? address.state + ', ' : '';
+                        locationString += address.country ? address.country + ', ' : '';
+                        locationString += address.postcode ? address.postcode : '';
+
+                        locationDiv.innerHTML = locationString;
+                    } else {
+                        locationDiv.innerHTML = 'Unable to fetch address.';
+                    }
+                }).fail(function() {
+                    locationDiv.innerHTML = 'Error occurred while fetching address.';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+

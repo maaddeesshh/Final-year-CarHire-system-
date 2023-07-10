@@ -19,7 +19,7 @@ class Hire(models.Model):
     start_date = models.DateField(
         validators=[MinValueValidator(datetime.date.today(), "Start date can not be less than today")])
     end_date = models.DateField(
-        validators=[MinValueValidator(datetime.date.today(), "Start date can not be less than today")])
+        validators=[MinValueValidator(datetime.date.today(), "End date can not be less than today")])
     phone_no = models.CharField(max_length=20, null="True",
                                 validators=[RegexValidator('^(0)([127])(\d){8}$', message='Invalid phone numbers')])
     is_approved = models.BooleanField(default=False)
