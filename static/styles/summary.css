@@ -1,0 +1,35 @@
+.card {
+    background-color: sandybrown;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+.bar-chart {
+    width: 300px;
+    height: 20px;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    position: relative;
+    margin: 10px auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.bar-chart:hover {
+    background-color: #e8e8e8;
+}
+
+.bar {
+    background-color: #007bff;
+    height: 100%;
+    position: absolute;
+    transition: width 0.3s ease;
+}
+
+.report p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888;
+}

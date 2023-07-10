@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/summary.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    
+
+<div class="report">
+    <div class="card">
+        <h3>Users</h3>
+        <div class="bar-chart">
+            <div class="bar" style="width: {{ user_count }}%"></div>
+        </div>
+        <p>{{ user_count }}</p>
+    </div>
+</div>
+
+<div class="report">
+    <div class="card">
+        <h3>Cars</h3>
+        <div class="bar-chart">
+            <div class="bar" style="width: {{ car_count }}%"></div>
+        </div>
+        <p>{{ car_count }}</p>
+    </div>
+</div>
+<div class="report">
+    <div class="card">
+    <h3>Hires</h3>
+    <div class="bar-chart">
+        <div class="bar" style="width: {{ hire_count }}%"></div>
+    </div>
+    <p>{{ hire_count }}</p>
+</div>
+</div>
+
+<div class="report">
+    <div class="card">
+    <h3>Reviews</h3>
+    <div class="bar-chart">
+        <div class="bar" style="width: {{ review_count }}%"></div>
+    </div>
+    <p>{{ review_count }}</p>
+</div>
+</div>
+
+    
+</body>
+</html>

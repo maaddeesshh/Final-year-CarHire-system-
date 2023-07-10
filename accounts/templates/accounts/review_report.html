@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/review_report.css' %}">
+    <title>Review Report</title>
+</head>
+<body>
+    <h2>Review Report</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Car Registration</th>
+                <th>Customer Name</th>
+                <th>Rate</th>
+                <th>Rate Choice</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+            <tr>
+                <td>{{ review.owner.name }}</td>
+                <td>{{ review.owner.car.reg_no }}</td>
+                <td>{{ review.customer.name }}</td>
+                <td>{{ review.rate }}</td>
+                <td>{{ review.get_rate_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

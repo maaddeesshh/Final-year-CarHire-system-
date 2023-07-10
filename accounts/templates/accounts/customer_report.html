@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Report</title>
+</head>
+<body>
+    <h1>Customer Report</h1>
+
+    <form method="GET" action="">
+        <label for="name">Name:</label>
+        <input type="text" name="name" value="{{ request.GET.name }}" placeholder="Filter by name">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ request.GET.email }}" placeholder="Filter by email">
+        <br>
+        <label for="registration_date">Registration Date:</label>
+        <input type="date" name="registration_date" value="{{ request.GET.registration_date }}" placeholder="Filter by registration date">
+        <br>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Total Hires</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.date_joined }}</td>
+                <td>{{ customer.total_hires }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

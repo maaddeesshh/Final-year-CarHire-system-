@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/approved_report.css' %}">
+    <title>Approved Hire Report</title>
+</head>
+<body>
+    <h2>Approved Hire Report</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Car Registration</th>
+                <th>Customer Name</th>
+                <th>Date of Hire Approval</th>
+                <th>From Destination</th>
+                <th>To Destination</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hire in approved_hires %}
+            <tr>
+                <td>{{ hire.car.owner.name }}</td>
+                <td>{{ hire.car.reg_no }}</td>
+                <td>{{ hire.customer.name }}</td>
+                
+                <td>{{ hire.from_destination }}</td>
+                <td>{{ hire.to_destination }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

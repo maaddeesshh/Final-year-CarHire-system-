@@ -18,6 +18,17 @@ urlpatterns = [
     path('contact/',views.Contact,name="contact"),
     path('services/',views.Service,name="Services"), 
     # path('Terms_Of_Use/',views.Terms,name="Terms"),
+    
+    path('custom_admin_dashboard/',views.CustomAdminDashboard,name="admin_dashboard"),
+    path('custom_admin_dashboard_filter/',views.filter,name="filter"),
+    path('custom_admin_dashboard_summary/',views.summary,name="summary"),
+    path('custom_admin_dashboard_customer-report/', views.customer_report, name='customer_report'),
+    path('custom_admin_dashboard_owner-report/', views.owner_report, name='owner_report'),
+    path('custom_admin_dashboard_approved-report/', views.approved_report, name='approved_report'),
+    path('custom_admin_dashboard_reject-report/', views.rejected_report, name='rejected_report'),
+    path('custom_admin_dashboard_review-report/', views.review_report, name='review_report'),
+
+
     path('owner/',views.ownerPage,name="owner_dashboard"),
     path('owner_update/', views.OwnerUpdateProfile, name='owner-update-profile'),
     path('owner_delete/', views.OwnerdeleteAccount, name='owner-delete-profile'),

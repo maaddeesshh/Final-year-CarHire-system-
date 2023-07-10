@@ -27,40 +27,173 @@ from Hire.models import *
 from django.template import loader
 from django.db.models import Avg, Count
 from django.contrib.auth.models import Group
+from django.http import HttpResponse
 
 
 
 
 
 
-#authenticate, login user
 def LoginPage(request):
-     page = 'login'
-     msg= None
-     if request.user.is_authenticated:
-          return redirect('home') #if a user is already authenticated, take the user to homepage
-     if request.method == "POST":
-          username = request.POST.get('username') # get username from user form input, asign to variable username
-          password = request.POST.get('password') # get password from user form input, asign to variable password
-
-          try:
-               user = User.objects.get(username=username)
-          except:
-               msg= 'User does not exist' 
-          user= authenticate(request, username=username, password=password)
-
-          if user is not None and user.groups.filter(name='customer').exists():
-             login(request, user)
-             return redirect('customer_dashboard')#after successful authentication, redirect user to dashboard according to role
-          elif user is not None and user.groups.filter(name='owner').exists():
-             login(request, user)
-             return redirect('owner_dashboard')
-
+    page = 'login'
+    msg = None
+    
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            user = get_user_model().objects.get(username=username)
+        except get_user_model().DoesNotExist:
+            msg = 'User does not exist'
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None and user.is_superuser:
+            login(request, user)
+            return redirect('admin_dashboard')  # Redirect to admin dashboard
+            
+        elif user is not None and user.groups.filter(name='customer').exists():
+            login(request, user)
+            return redirect('customer_dashboard')
+            
+        elif user is not None and user.groups.filter(name='owner').exists():
+            login(request, user)
+            return redirect('owner_dashboard')
           
-          else:
-               msg='username or password is incorrect'      
-     context={'msg':msg, 'page':page}
-     return render(request, 'accounts/login_register.html', context)
+        else:
+            msg = 'Username or password is incorrect'
+    
+    context = {'msg': msg, 'page': page}
+    return render(request, 'accounts/login_register.html', context)
+
+
+
+
+def approved_report(request):
+    # Get all approved hire requests
+    approved_hires = Hire.objects.filter(is_approved=True)
+
+    # Render the template with the approved hire report data
+    return render(request, 'accounts/approved_report.html', {'approved_hires': approved_hires})
+
+
+def rejected_report(request):
+    # Get all rejected hire requests
+    rejected_hires = Hire.objects.filter(is_rejected=True)
+
+    # Render the template with the rejected hire report data
+    return render(request, 'accounts/rejected_report.html', {'rejected_hires': rejected_hires})
+   
+from django.shortcuts import render
+from .models import Review
+
+def review_report(request):
+    # Get all reviews
+    reviews = Review.objects.all()
+
+    # Render the template with the review report data
+    return render(request, 'accounts/review_report.html', {'reviews': reviews})
+
+def CustomAdminDashboard(request):
+   return render(request,'accounts/admin.html')
+def summary(request):
+    user_count = User.objects.count()
+    car_count = Car.objects.count()
+    hire_count = Hire.objects.count()
+    review_count = Review.objects.count()
+
+    # Render the admin dashboard template and pass the data
+    return render(request, 'accounts/summary.html', {
+        'user_count': user_count,
+        'car_count': car_count,
+        'hire_count': hire_count,
+        'review_count': review_count
+    })
+    
+from django.db.models import Count
+
+def CustomAdminDashboard(request):
+   return render(request, 'accounts/admin.html')
+def filter(request):
+     # Filter criteria
+    approved_hires = Hire.objects.filter(is_approved=True).count()
+    rejected_hires = Hire.objects.filter(is_rejected=True).count()
+    customer_users = User.objects.filter(groups__name='customer').count()
+    owner_users = User.objects.filter(groups__name='owner').count()
+    car_owners = User.objects.filter(groups__name='owner').annotate(num_cars=Count('car')).values('username', 'num_cars')
+    reviews_0_to_5 = Review.objects.filter(rate__range=(0, 5)).count()
+    reviews_5_to_10 = Review.objects.filter(rate__range=(5, 10)).count()
+
+    # Render the admin dashboard template and pass the report data
+    return render(request, 'accounts/filter.html', {
+        'approved_hires': approved_hires,
+        'rejected_hires': rejected_hires,
+        'customer_users': customer_users,
+        'owner_users': owner_users,
+        'car_owners': car_owners,
+        'reviews_0_to_5': reviews_0_to_5,
+        'reviews_5_to_10': reviews_5_to_10
+    })
+
+
+
+def customer_report(request):
+    # Get query parameters for filtering
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    registration_date = request.GET.get('registration_date')
+
+    # Filter customers based on query parameters
+    customers = User.objects.filter(groups__name='customer')
+    if name:
+        customers = customers.filter(name__icontains=name)
+    if email:
+        customers = customers.filter(email__icontains=email)
+    if registration_date:
+        customers = customers.filter(date_joined=registration_date)
+
+    # Calculate total number of hires for each customer
+    customers_with_hires = customers.annotate(total_hires=models.Count('hire'))
+
+    # Render the template with the customer report data
+    return render(request, 'accounts/customer_report.html', {'customers': customers_with_hires})
+
+
+from django.shortcuts import render
+from django.db.models import Count, Sum
+
+
+def owner_report(request):
+    # Get query parameters for filtering
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    registration_date = request.GET.get('registration_date')
+
+    # Filter owners based on query parameters
+    owners = User.objects.filter(groups__name='owner')
+    if name:
+        owners = owners.filter(name__icontains=name)
+    if email:
+        owners = owners.filter(email__icontains=email)
+    if registration_date:
+        owners = owners.filter(date_joined=registration_date)
+
+    # Annotate owners with aggregated hire request data
+    owners_with_data = owners.annotate(
+        total_cars=Count('car', distinct=True),
+        total_hire_requests=Count('car__hire', distinct=True),
+        total_approved_requests=Sum('car__hire__is_approved'),
+        total_rejected_requests=Sum('car__hire__is_rejected')
+    )
+
+    # Render the template with the owner report data
+    return render(request, 'accounts/owner_report.html', {'owners': owners_with_data})
+
+    
 #logout user, redirect to home
 def logoutUser(request):
      logout(request)
@@ -143,6 +276,7 @@ def deleteAccount(request):
         return redirect('home')
     
     return render(request, 'accounts/Customer_delete_account.html')
+
 
 
 
