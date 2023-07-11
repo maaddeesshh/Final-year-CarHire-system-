@@ -16,6 +16,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from Owner.forms import CarForm
 from django.urls import reverse
 from django.db.models import Q
+from django.shortcuts import render
+from django.db.models import Count, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from Hire.models import Hire
 from datetime import date
@@ -28,9 +30,10 @@ from django.template import loader
 from django.db.models import Avg, Count
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
-
-
-
+from django.template.loader import get_template
+from reportlab.pdfgen import canvas
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 
 
@@ -72,49 +75,79 @@ def LoginPage(request):
 
 
 
+def generate_pdf(html):
+    # Create a PDF generator
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+
+    # Generate PDF using HTML content
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF')
+
+    return response
 
 def approved_report(request):
     # Get all approved hire requests
     approved_hires = Hire.objects.filter(is_approved=True)
+     # Render the HTML template with the approved hire report data
+    template = get_template('accounts/approved_report.html')
+    html = template.render({'approved_hires': approved_hires}, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
 
     # Render the template with the approved hire report data
-    return render(request, 'accounts/approved_report.html', {'approved_hires': approved_hires})
+    # return render(request, 'accounts/approved_report.html', {'approved_hires': approved_hires})
 
 
 def rejected_report(request):
     # Get all rejected hire requests
     rejected_hires = Hire.objects.filter(is_rejected=True)
+     # Render the HTML template with the rejected hire report data
+    template = get_template('accounts/rejected_report.html')
+    html = template.render({'rejected_hires': rejected_hires}, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
 
     # Render the template with the rejected hire report data
-    return render(request, 'accounts/rejected_report.html', {'rejected_hires': rejected_hires})
+    # return render(request, 'accounts/rejected_report.html', {'rejected_hires': rejected_hires})
    
-from django.shortcuts import render
-from .models import Review
+
 
 def review_report(request):
     # Get all reviews
     reviews = Review.objects.all()
 
-    # Render the template with the review report data
-    return render(request, 'accounts/review_report.html', {'reviews': reviews})
+    # Render the HTML template with the review report data
+    template = get_template('accounts/review_report.html')
+    html = template.render({'reviews': reviews}, request)
 
-def CustomAdminDashboard(request):
-   return render(request,'accounts/admin.html')
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
+
+    # Render the template with the review report data
+    # return render(request, 'accounts/review_report.html', {'reviews': reviews})
+
 def summary(request):
     user_count = User.objects.count()
     car_count = Car.objects.count()
     hire_count = Hire.objects.count()
     review_count = Review.objects.count()
-
-    # Render the admin dashboard template and pass the data
-    return render(request, 'accounts/summary.html', {
+      # Render the HTML template with the summary report data
+    template = get_template('accounts/summary.html')
+    html = template.render({
         'user_count': user_count,
         'car_count': car_count,
         'hire_count': hire_count,
         'review_count': review_count
-    })
-    
-from django.db.models import Count
+    }, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
+
+
 
 def CustomAdminDashboard(request):
    return render(request, 'accounts/admin.html')
@@ -128,8 +161,9 @@ def filter(request):
     reviews_0_to_5 = Review.objects.filter(rate__range=(0, 5)).count()
     reviews_5_to_10 = Review.objects.filter(rate__range=(5, 10)).count()
 
-    # Render the admin dashboard template and pass the report data
-    return render(request, 'accounts/filter.html', {
+     # Render the HTML template with the report data
+    template = get_template('accounts/filter.html')
+    html = template.render({
         'approved_hires': approved_hires,
         'rejected_hires': rejected_hires,
         'customer_users': customer_users,
@@ -137,7 +171,10 @@ def filter(request):
         'car_owners': car_owners,
         'reviews_0_to_5': reviews_0_to_5,
         'reviews_5_to_10': reviews_5_to_10
-    })
+    }, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
 
 
 
@@ -159,12 +196,15 @@ def customer_report(request):
     # Calculate total number of hires for each customer
     customers_with_hires = customers.annotate(total_hires=models.Count('hire'))
 
-    # Render the template with the customer report data
-    return render(request, 'accounts/customer_report.html', {'customers': customers_with_hires})
+     # Render the HTML template with the customer report data
+    template = get_template('accounts/customer_report.html')
+    html = template.render({'customers': customers_with_hires}, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
 
 
-from django.shortcuts import render
-from django.db.models import Count, Sum
+
 
 
 def owner_report(request):
@@ -190,8 +230,12 @@ def owner_report(request):
         total_rejected_requests=Sum('car__hire__is_rejected')
     )
 
-    # Render the template with the owner report data
-    return render(request, 'accounts/owner_report.html', {'owners': owners_with_data})
+     # Render the HTML template with the owner report data
+    template = get_template('accounts/owner_report.html')
+    html = template.render({'owners': owners_with_data}, request)
+
+    # Generate and return the PDF report using ReportLab
+    return generate_pdf(html)
 
     
 #logout user, redirect to home
