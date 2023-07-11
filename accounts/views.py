@@ -34,6 +34,13 @@ from django.template.loader import get_template
 from reportlab.pdfgen import canvas
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+import datetime
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from django.http import HttpResponse
 
 
 
@@ -74,7 +81,6 @@ def LoginPage(request):
     return render(request, 'accounts/login_register.html', context)
 
 
-
 def generate_pdf(html):
     # Create a PDF generator
     response = HttpResponse(content_type='application/pdf')
@@ -90,9 +96,10 @@ def generate_pdf(html):
 def approved_report(request):
     # Get all approved hire requests
     approved_hires = Hire.objects.filter(is_approved=True)
+    logo_path = 'images/logo.svg'
      # Render the HTML template with the approved hire report data
     template = get_template('accounts/approved_report.html')
-    html = template.render({'approved_hires': approved_hires}, request)
+    html = template.render({'approved_hires': approved_hires, 'logo_path':logo_path}, request)
 
     # Generate and return the PDF report using ReportLab
     return generate_pdf(html)
