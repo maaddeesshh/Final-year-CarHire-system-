@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/review_report.css' %}">
+    <title>Review Report</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            text-decoration: underline;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #fff;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>carHire-CH</h1>
+    <h3>Email: carhire172@gmail.com</h3>
+    <h3>Kenyatta University</h3>
+    <h3>Phone: 0717548446</h3>
+    <h1>Review Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Customer Name</th>
+                <th>Rate</th>
+                <th>Rate Choice</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+            <tr>
+                <td>{{ review.owner.name }}</td>
+                <td>{{ review.customer.name }}</td>
+                <td>{{ review.rate }}</td>
+                <td>{{ review.get_rate_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

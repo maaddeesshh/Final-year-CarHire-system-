@@ -347,18 +347,23 @@ def ownerPage(request):
      return render(request, 'accounts/owner_dashboard.html' , context)
 @login_required(login_url='login') 
 def updateCar(request, pk):
-     car = Car.objects.get(id=pk)
-     form = CarForm(instance=car)
-     if request.user != car.owner:
-          return HttpResponse('<h1 style="color: red;">You are not allowed here!!!</h1>')
+    car = Car.objects.get(id=pk)
+    form = CarForm(instance=car)
 
-     if request.method == 'POST':
-          form = CarForm(request.POST, instance=car)
-          if form.is_valid:
-               form.save()
-               return redirect('owner_dashboard')
-     context={'form':form}
-     return render(request, 'Owner/createcar.html', context)
+    if request.user != car.owner:
+        return HttpResponse('<h1 style="color: red;">You are not allowed here!!!</h1>')
+
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES, instance=car)
+        if form.is_valid():
+            form.save()
+            return redirect('owner_dashboard')
+
+    context = {'form': form}
+    return render(request, 'Owner/updatecar.html', context)
+
+
+
 
 @login_required(login_url='login') 
 def deleteCar(request, pk):
@@ -611,7 +616,120 @@ def view_owner_ratings(request):
     return render(request, 'accounts/view_owner_ratings.html', context)
 
 
+def approved_report1(request):
+    # Get all approved hire requests
+    approved_hires = Hire.objects.filter(is_approved=True)
 
+    # Render the template with the approved hire report data
+    return render(request, 'accounts/approved_report1.html', {'approved_hires': approved_hires})
+
+
+def rejected_report1(request):
+    # Get all rejected hire requests
+    rejected_hires = Hire.objects.filter(is_rejected=True)
+
+    # Render the template with the rejected hire report data
+    return render(request, 'accounts/rejected_report1.html', {'rejected_hires': rejected_hires})
+   
+
+
+def review_report1(request):
+    # Get all reviews
+    reviews = Review.objects.all()
+
+    # Render the template with the review report data
+    return render(request, 'accounts/review_report1.html', {'reviews': reviews})
+
+def summary1(request):
+    user_count = User.objects.count()
+    car_count = Car.objects.count()
+    hire_count = Hire.objects.count()
+    review_count = Review.objects.count()
+
+    # Render the admin dashboard template and pass the data
+    return render(request, 'accounts/summary1.html', {
+        'user_count': user_count,
+        'car_count': car_count,
+        'hire_count': hire_count,
+        'review_count': review_count
+    })
+    
+
+
+
+def filter1(request):
+     # Filter criteria
+    approved_hires = Hire.objects.filter(is_approved=True).count()
+    rejected_hires = Hire.objects.filter(is_rejected=True).count()
+    customer_users = User.objects.filter(groups__name='customer').count()
+    owner_users = User.objects.filter(groups__name='owner').count()
+    car_owners = User.objects.filter(groups__name='owner').annotate(num_cars=Count('car')).values('username', 'num_cars')
+    reviews_0_to_5 = Review.objects.filter(rate__range=(0, 5)).count()
+    reviews_5_to_10 = Review.objects.filter(rate__range=(5, 10)).count()
+
+    # Render the admin dashboard template and pass the report data
+    return render(request, 'accounts/filter1.html', {
+        'approved_hires': approved_hires,
+        'rejected_hires': rejected_hires,
+        'customer_users': customer_users,
+        'owner_users': owner_users,
+        'car_owners': car_owners,
+        'reviews_0_to_5': reviews_0_to_5,
+        'reviews_5_to_10': reviews_5_to_10
+    })
+
+
+
+def customer_report1(request):
+    # Get query parameters for filtering
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    registration_date = request.GET.get('registration_date')
+
+    # Filter customers based on query parameters
+    customers = User.objects.filter(groups__name='customer')
+    if name:
+        customers = customers.filter(name__icontains=name)
+    if email:
+        customers = customers.filter(email__icontains=email)
+    if registration_date:
+        customers = customers.filter(date_joined=registration_date)
+
+    # Calculate total number of hires for each customer
+    customers_with_hires = customers.annotate(total_hires=models.Count('hire'))
+
+    # Render the template with the customer report data
+    return render(request, 'accounts/customer_report1.html', {'customers': customers_with_hires})
+
+
+
+
+
+def owner_report1(request):
+    # Get query parameters for filtering
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    registration_date = request.GET.get('registration_date')
+
+    # Filter owners based on query parameters
+    owners = User.objects.filter(groups__name='owner')
+    if name:
+        owners = owners.filter(name__icontains=name)
+    if email:
+        owners = owners.filter(email__icontains=email)
+    if registration_date:
+        owners = owners.filter(date_joined=registration_date)
+
+    # Annotate owners with aggregated hire request data
+    owners_with_data = owners.annotate(
+        total_cars=Count('car', distinct=True),
+        total_hire_requests=Count('car__hire', distinct=True),
+        total_approved_requests=Sum('car__hire__is_approved'),
+        total_rejected_requests=Sum('car__hire__is_rejected')
+    )
+
+    # Render the template with the owner report data
+    return render(request, 'accounts/owner_report1.html', {'owners': owners_with_data}) 
 
 def location_view(request):
     return render(request, 'accounts/location.html')

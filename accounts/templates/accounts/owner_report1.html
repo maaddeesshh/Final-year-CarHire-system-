@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Report</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Set fixed widths for each column */
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 20%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 20%;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 20%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 10%;
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 10%;
+        }
+
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 10%;
+        }
+
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 10%;
+        }
+    </style>
+</head>
+<body>
+    <h1>carHire-CH</h1>
+    <h3>Email: carhire172@gmail.com</h3>
+    <h3>Kenyatta University</h3>
+    <h3>Phone: 0717548446</h3>
+    <h1 style="text-decoration: underline;">Owner Report</h1>
+
+    <form method="GET" action="">
+        <label for="name">Name:</label>
+        <input type="text" name="name" value="{{ request.GET.name }}" placeholder="Filter by name">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ request.GET.email }}" placeholder="Filter by email">
+        <br>
+        <label for="registration_date">Registration Date:</label>
+        <input type="date" name="registration_date" value="{{ request.GET.registration_date }}" placeholder="Filter by registration date">
+        <br>
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Total Cars</th>
+                <th>Total Hire Requests</th>
+                <th>Total Approved Requests</th>
+                <th>Total Rejected Requests</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for owner in owners %}
+            <tr>
+                <td>{{ owner.name }}</td>
+                <td>{{ owner.email }}</td>
+                <td>{{ owner.date_joined }}</td>
+                <td>{{ owner.total_cars }}</td>
+                <td>{{ owner.total_hire_requests }}</td>
+                <td>{{ owner.total_approved_requests }}</td>
+                <td>{{ owner.total_rejected_requests }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

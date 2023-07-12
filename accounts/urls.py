@@ -27,6 +27,14 @@ urlpatterns = [
     path('custom_admin_dashboard_approved-report/', views.approved_report, name='approved_report'),
     path('custom_admin_dashboard_reject-report/', views.rejected_report, name='rejected_report'),
     path('custom_admin_dashboard_review-report/', views.review_report, name='review_report'),
+    path('custom_admin_dashboard_filter1/',views.filter1,name="filter1"),
+    path('custom_admin_dashboard_summary1/',views.summary1,name="summary1"),
+    path('custom_admin_dashboard_customer-report1/', views.customer_report1, name='customer_report1'),
+    path('custom_admin_dashboard_owner-report1/', views.owner_report1, name='owner_report1'),
+    path('custom_admin_dashboard_approved-report1/', views.approved_report1, name='approved_report1'),
+    path('custom_admin_dashboard_reject-report1/', views.rejected_report1, name='rejected_report1'),
+    path('custom_admin_dashboard_review-report1/', views.review_report1, name='review_report1'),
+
 
 
     path('owner/',views.ownerPage,name="owner_dashboard"),
