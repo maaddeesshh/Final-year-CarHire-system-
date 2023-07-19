@@ -93,6 +93,8 @@ def generate_pdf(html):
 
     return response
 
+
+
 def approved_report(request):
     # Get all approved hire requests
     approved_hires = Hire.objects.filter(is_approved=True)
@@ -103,9 +105,6 @@ def approved_report(request):
 
     # Generate and return the PDF report using ReportLab
     return generate_pdf(html)
-
-    # Render the template with the approved hire report data
-    # return render(request, 'accounts/approved_report.html', {'approved_hires': approved_hires})
 
 
 def rejected_report(request):
