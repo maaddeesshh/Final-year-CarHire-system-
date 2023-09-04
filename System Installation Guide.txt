@@ -1,0 +1,11 @@
+System Installation Guide
+1.First install Django into your machine, to install Django, you must have Python installed, and a
+package manager like PIP. To check if the python uses the python – version.
+Check if Django has installed the Django-admin - - version.
+2. Insert CD in the CD/DVD drive and copy the carHire folder to a directory
+of your choice.
+3. Open the terminal, activate the virtual environment and navigate to the carHire folder which
+contains the Django apps files and run this command:  pip install -r requirements.txt.
+4. After navigating the carHire run the following commands to start the server.
+        python manage.py runserver
+5.On your browser go to http://127.0.0.1:8000/ to see the homepage.
